@@ -40,6 +40,23 @@ namespace BoxinatorBackend.Controllers
             return CreatedAtAction(nameof(GetAllPackage), new { id = package.Id }, package);
         }
 
+
+        [HttpGet("Package/{id}")]
+        public async Task<ActionResult<GetPackageDTO>> GetPackageById(int id)
+        {
+            try
+            {
+                return Ok(_mapper.Map<GetPackageDTO>(await _packageService.GetPackageById(id)));
+            }
+            catch (PackageNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Detail = ex.Message
+                });
+            }
+        }
+
         [HttpGet("Package/myemail")]
         public async Task<ActionResult<GetPackageDTO>> GetPackageByEmail(string email)
         {
@@ -132,22 +149,6 @@ namespace BoxinatorBackend.Controllers
             }
 
             return NoContent();
-        }
-
-        [HttpGet("Package/{id}")]
-        public async Task<ActionResult<GetPackageDTO>> GetPackageById(int id)
-        {
-            try
-            {
-                return Ok(_mapper.Map<GetPackageDTO>(await _packageService.GetPackageById(id)));
-            }
-            catch (PackageNotFoundException ex)
-            {
-                return NotFound(new ProblemDetails
-                {
-                    Detail = ex.Message
-                });
-            }
         }
 
     }
