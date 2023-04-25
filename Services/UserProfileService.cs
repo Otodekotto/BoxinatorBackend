@@ -1,5 +1,8 @@
 ﻿using BoxinatorBackend.Data;
+using BoxinatorBackend.Exceptions;
 using BoxinatorBackend.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
 
 namespace BoxinatorBackend.Services
 {
@@ -13,24 +16,51 @@ namespace BoxinatorBackend.Services
             _context = context;
         }
 
-        public Task<UserProfile> CreateUserProfile(UserProfile userProfile)
+        public async Task<UserProfile> CreateUserProfile(UserProfile userProfile)
         {
-            throw new NotImplementedException();
+            _context.UserProfiles.Add(userProfile);
+            await _context.SaveChangesAsync();
+
+            return userProfile;
         }
 
-        public Task DeleteUserProfile(int id)
+        public async Task DeleteUserProfile(int id)
         {
-            throw new NotImplementedException();
+            var profile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.Id == id);
+            if (profile == null)
+            {
+                throw new UserProfileNotFoundException(id);
+            }
+            _context.UserProfiles.Remove(profile);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<UserProfile> GetUserProfileById(int id)
+        public async Task<IEnumerable<UserProfile>> GetAllUserProfiles()
         {
-            throw new NotImplementedException();
+            return await _context.UserProfiles.ToListAsync();
         }
 
-        public Task<UserProfile> UpdateUserProfile(Country userProfile)
+        public async Task<UserProfile> GetUserProfileById(int id)
         {
-            throw new NotImplementedException();
+            var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (userProfile == null)
+            {
+                throw new UserProfileNotFoundException(id);
+            }
+            return userProfile;
+        }
+
+        public async Task<UserProfile> UpdateUserProfile(UserProfile userProfile)
+        {
+            var foundUserProfile = await _context.Packages.AnyAsync(x => x.Id == userProfile.Id);
+            if (!foundUserProfile)
+            {
+                throw new UserProfileNotFoundException(userProfile.Id);
+            }
+            _context.Entry(userProfile).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return userProfile;
         }
     }
 }

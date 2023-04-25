@@ -39,7 +39,7 @@ namespace BoxinatorBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countrys");
+                    b.ToTable("Countrys", (string)null);
                 });
 
             modelBuilder.Entity("BoxinatorBackend.Models.Package", b =>
@@ -84,7 +84,7 @@ namespace BoxinatorBackend.Migrations
 
                     b.HasIndex("UserProfileId");
 
-                    b.ToTable("Packages");
+                    b.ToTable("Packages", (string)null);
                 });
 
             modelBuilder.Entity("BoxinatorBackend.Models.UserProfile", b =>
@@ -119,7 +119,7 @@ namespace BoxinatorBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserProfiles");
+                    b.ToTable("UserProfiles", (string)null);
                 });
 
             modelBuilder.Entity("BoxinatorBackend.Models.Package", b =>

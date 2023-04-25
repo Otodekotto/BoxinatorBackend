@@ -12,6 +12,5 @@ namespace BoxinatorBackend.Models
         public string Destination { get; set; }
         public string PackageStatus { get; set; }
         public string OrderTime { get; set; }
-
     }
 }

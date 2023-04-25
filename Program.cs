@@ -19,6 +19,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<IPackageService, PackageService>();
 builder.Services.AddTransient<ICountryService, CountryService>();
+builder.Services.AddTransient<IUserProfileService, UserProfileService>();
 
 var app = builder.Build();
 
